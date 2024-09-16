@@ -31,7 +31,10 @@ public class NotificationEventListener {
     }
 
     @KafkaListener(topics = "low_stock_alerts", groupId = "notification_group")
-    public void listenLowStockAlerts(String message) {
+    public void listenLowStockAlerts(JsonNode jsonNode) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String message = objectMapper.writeValueAsString(jsonNode);
+
         System.out.println("we are in  low stock alerts");
         notificationService.sendEmail("mmandlecha@gmail.com", "Low Stock Alert", message);
     }
